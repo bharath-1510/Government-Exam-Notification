@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 26, 2024 at 03:47 PM
+-- Generation Time: Feb 26, 2024 at 04:33 PM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.13
 
@@ -110,6 +110,42 @@ CREATE TABLE IF NOT EXISTS `exams` (
   `user_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exam_info`
+--
+
+DROP TABLE IF EXISTS `exam_info`;
+CREATE TABLE IF NOT EXISTS `exam_info` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `exam_info`
+--
+
+INSERT INTO `exam_info` (`id`, `name`) VALUES
+(1, 'Group 2'),
+(2, 'Group 4'),
+(3, 'TNPSC'),
+(4, 'UPSC'),
+(5, 'IBPS PO'),
+(6, 'NDA&NA'),
+(7, 'RRB'),
+(8, 'SSC CHSL'),
+(9, 'SSC CGL'),
+(10, 'CDS'),
+(11, 'State PSC'),
+(12, 'Civil Services'),
+(13, 'UPSC CAPF'),
+(14, 'ALP'),
+(15, 'Defence exams'),
+(16, 'CTET exam'),
+(17, 'Multi tasking staff');
 
 -- --------------------------------------------------------
 

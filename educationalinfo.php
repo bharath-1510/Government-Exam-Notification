@@ -134,7 +134,6 @@
                 <option value="Diploma">Diploma</option>
                 <option value="Graduation">Graduation</option>
                 <option value="Post Graduation">Post Graduation</option>
-                <option value="Others">Others</option>
             </select>
             <div class="select-arrow">&#9660;</div>
         </div>
