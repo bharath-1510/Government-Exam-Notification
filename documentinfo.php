@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Government Exam Notification</title>
     <style>
+        .radio-group {
+            display: flex;
+            width: 400px;
+            gap: 20px;
+        }
+
+        .rb {
+            width: 50px;
+            display: flex;
+        }
+
         .select-container {
             position: relative;
             width: 100%;
@@ -62,6 +73,10 @@
         form label {
             display: block;
             margin-bottom: 8px;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
         }
 
         form input {
@@ -129,25 +144,58 @@
         <div class="inline">
             <div class="col">
                 <h2>Mandatory Documents</h2>
-                <label for="resume">Upload Your Resume/CV (Only .doc, .docx, .pdf files allowed):</label>
+                <label for="resume">Upload Your Resume/CV (Only .doc, .docx, .pdf files allowed)</label>
                 <input type="file" id="resume" name="resume" accept=".doc, .docx, .pdf" required>
 
-                <label for="photo">Upload Your Photo (Only .jpg, .jpeg, .png files allowed):</label>
+                <label for="photo">Upload Your Photo (Only .jpg, .jpeg, .png files allowed)</label>
                 <input type="file" id="photo" name="photo" accept=".jpg, .jpeg, .png" required>
 
-                <label for="signature">Upload Your Signature (Only .jpg, .jpeg, .png files allowed):</label>
+                <label for="signature">Upload Your Signature (Only .jpg, .jpeg, .png files allowed)</label>
                 <input type="file" id="signature" name="signature" accept=".jpg, .jpeg, .png" required>
             </div>
             <div class="col">
-                <h2>Optional Documents</h2>
-                <label for="typistCert">Typist Certification (Only .doc, .docx, .pdf files allowed):</label>
-                <input type="file" id="typistCert" name="typistCert" accept=".doc, .docx, .pdf">
+                <h2>Optional Fields</h2>
+                <label for="typistCert">Have you completed any Typist Certification?</label>
+                <div class="radio-group">
+                    <div class="rb">
 
-                <label for="stenographerCert">Stenographer Certification (Only .doc, .docx, .pdf files allowed):</label>
-                <input type="file" id="stenographerCert" name="stenographerCert" accept=".doc, .docx, .pdf">
+                        <input type="radio" name="typistCert" value="yes">
+                        Yes
+                    </div>
+                    <div class="rb">
 
-                <label for="computerCourseCert">Computer Course Certification (Only .doc, .docx, .pdf files allowed):</label>
-                <input type="file" id="computerCourseCert" name="computerCourseCert" accept=".doc, .docx, .pdf">
+                        <input type="radio" name="typistCert" value="no" checked>
+                        No
+                    </div>
+                </div>
+
+                <label for="stenographerCert">Have you completed any Stenographer Certification?</label>
+                <div class="radio-group">
+                    <div class="rb">
+                        <input type="radio" name="stenographerCert" value="yes">
+                        Yes
+                    </div>
+                    <div class="rb">
+                        <input type="radio" name="stenographerCert" value="no" checked>
+                        No
+                    </div>
+                </div>
+
+
+                <label for="computerCourseCert">Have you completed any Computer Course Certification?</label>
+                <div class="radio-group">
+                    <div class="rb">
+
+                        <input type="radio" name="computerCourseCert" value="yes">
+                        Yes
+                    </div>
+                    <div class="rb">
+
+                        <input type="radio" name="computerCourseCert" value="no" checked>
+                        No
+                    </div>
+                </div>
+
             </div>
         </div>
         <button type="submit">Save</button>
@@ -166,10 +214,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $photoBlob = file_get_contents($_FILES['photo']['tmp_name']);
     $signatureBlob = file_get_contents($_FILES['signature']['tmp_name']);
 
-    // Handle Optional Documents
-    // $typistCertBlob = isset($_FILES['typistCert']) ? file_get_contents($_FILES['typistCert']['tmp_name']) : null;
-    // $stenographerCertBlob = isset($_FILES['stenographerCert']) ? file_get_contents($_FILES['stenographerCert']['tmp_name']) : null;
-    // $computerCourseCertBlob = isset($_FILES['computerCourseCert']) ? file_get_contents($_FILES['computerCourseCert']['tmp_name']) : null;
+    $typistCert = $_POST["typistCert"] === "yes" ? 1 : 0;
+    $stenographerCert = $_POST["stenographerCert"] === "yes" ? 1 : 0;
+    $computerCourseCert = $_POST["computerCourseCert"] === "yes" ? 1 : 0;
+
     $dsn = 'mysql:host=localhost;dbname=students4244';
     $username = 'root';
     $password = '';
@@ -182,21 +230,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     // Insert data into the database
     $stmt = $pdo->prepare("INSERT INTO document_info (id,resume, photo, signature
-    -- // , typist_cert, stenographer_cert, computer_course_cert
+     , typist_cert, stenography_cert, computer_course_cert
      ) VALUES ($id,:resume, :photo, :sign
-    -- // , ?, ?, ?
+     ,:typist, :steno, :cs
      )");
 
     $stmt->bindParam(':resume', $resume, PDO::PARAM_LOB);
     $stmt->bindParam(':photo', $photoBlob, PDO::PARAM_LOB);
     $stmt->bindParam(':sign', $signatureBlob, PDO::PARAM_LOB);
 
-    // $stmt->bindParam(4, $typistCertBlob, PDO::PARAM_LOB);
-    // $stmt->bindParam(5, $stenographerCertBlob, PDO::PARAM_LOB);
-    // $stmt->bindParam(6, $computerCourseCertBlob, PDO::PARAM_LOB);
+    $stmt->bindParam(':typist', $typistCert, PDO::PARAM_BOOL);
+    $stmt->bindParam(':steno', $stenographerCert, PDO::PARAM_BOOL);
+    $stmt->bindParam(':cs', $computerCourseCert, PDO::PARAM_BOOL);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Documents Uploaded Succesfully')</script>";
+        echo "<script>alert('Details Uploaded Succesfully')</script>";
         echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
     } else {
         echo "<script>alert('Error')</script>";
