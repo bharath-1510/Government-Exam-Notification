@@ -44,7 +44,7 @@
         }
 
         form button {
-            background-color: #4caf50;
+            background-color: #007bff;
             color: #fff;
             padding: 10px;
             border: none;
@@ -56,7 +56,7 @@
         }
 
         form button:hover {
-            background-color: #45a049;
+            background-color: #007bff;
         }
 
         .switch-form {
@@ -72,9 +72,9 @@
 </head>
 
 <body>
-    <form id="login-form" action="personal.php">
+    <form id="login-form" action="" method="post">
         <h2>Login</h2>
-        <input type="text" id="username" name="username" placeholder="Username" required>
+        <input type="text" id="email" name="email" placeholder="Email" required>
 
         <input type="password" id="password" name="password" placeholder="Password" required>
 
@@ -113,21 +113,71 @@ if (
     isset($_POST["username"]) && isset($_POST["email"])
     && isset($_POST["password"]) && isset($_POST["confirm-password"])
 ) {
-    date_default_timezone_set('Asia/Kolkata');
-    $date = date('d-m-Y H:i:s');
+    try {
+        $name = $_POST["username"];
+        $email = $_POST["email"];
+        $userPassword = $_POST["password"];
+        if ($userPassword !== $_POST["confirm-password"]) {
+            echo "<script>alert('Password Not Match');</script>";
+        } else {
+            date_default_timezone_set('Asia/Kolkata');
+            $date = date('Y-m-d H:i:s');
+            $host = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "students4244";
+            $con = mysqli_connect($host, $username, $password, $dbname);
+            if (!$con) {
+                die("Connection failed!" . mysqli_connect_error());
+            }
+            $sql = "INSERT INTO logininfo (name, email, createdAt,password) VALUES (?, ?, ?,?)";
+            $stmt = $con->prepare($sql);
+            $stmt->bind_param('ssss', $name, $email, $date, $userPassword);
+            if ($stmt->execute()) {
+                echo "<script>alert('User Registration Done')</script>";
+            } else {
+                echo "<script>alert('Error')</script>";
+            }
+            mysqli_close($con);
+        }
+    } catch (mysqli_sql_exception $e) {
+        if ($e->getCode() == 1062) {
+            echo "<script>alert('Error: User Already Exists.')</script>";
+        } else {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+} else
+if (
+    isset($_POST["email"]) && isset($_POST["password"])
+) {
+    $email = $_POST["email"];
+    $userPassword = $_POST["password"];
     $host = "localhost";
     $username = "root";
     $password = "";
     $dbname = "students4244";
-    date_default_timezone_set('Asia/Kolkata');
-    $date = date('d-m-Y H:i:s');
     $con = mysqli_connect($host, $username, $password, $dbname);
     if (!$con) {
         die("Connection failed!" . mysqli_connect_error());
     }
+    $sql = "SELECT id,email,password FROM logininfo";
+    $result = $con->query($sql);
 
-    mysqli_close($con);
-} 
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            if ($email === $row["email"] && $userPassword === $row['password']) {
+                $id = $row['id'];
+                header("Location: home.php?id=$id");
+                break;
+            }
+        }
+        echo "<script>alert('Password Mismatches')</script>";
+    } else {
+        echo "<script>alert('User Not Found')</script>";
+    }
+    $con->close();
+}
 ?>
 
 </html>

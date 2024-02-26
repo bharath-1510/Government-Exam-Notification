@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 25, 2024 at 11:03 AM
+-- Generation Time: Feb 26, 2024 at 06:14 AM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.13
 
@@ -20,6 +20,22 @@ SET time_zone = "+00:00";
 --
 -- Database: `students4244`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `addressinfo`
+--
+
+DROP TABLE IF EXISTS `addressinfo`;
+CREATE TABLE IF NOT EXISTS `addressinfo` (
+  `id` int NOT NULL,
+  `pincode` varchar(10) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `nationality` varchar(255) DEFAULT NULL,
+  `phone_number` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -63,13 +79,12 @@ DROP TABLE IF EXISTS `logininfo`;
 CREATE TABLE IF NOT EXISTS `logininfo` (
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `dob` date NOT NULL,
   `password` varchar(100) NOT NULL,
-  `phone_number` int NOT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
+  `createdAt` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -79,16 +94,14 @@ CREATE TABLE IF NOT EXISTS `logininfo` (
 
 DROP TABLE IF EXISTS `personalinfo`;
 CREATE TABLE IF NOT EXISTS `personalinfo` (
+  `id` int NOT NULL,
   `full_name` varchar(100) NOT NULL,
   `gender` varchar(10) NOT NULL,
   `community` varchar(100) NOT NULL,
-  `pincode` int NOT NULL,
-  `nationality` varchar(100) NOT NULL,
-  `state` varchar(60) NOT NULL,
   `religion` varchar(100) NOT NULL,
   `refugee` tinyint(1) NOT NULL,
   `differently_abled` tinyint(1) NOT NULL,
-  `id` int NOT NULL,
+  `dob` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -103,7 +116,8 @@ CREATE TABLE IF NOT EXISTS `qualification` (
   `id` int NOT NULL,
   `yop` int NOT NULL,
   `discipline` varchar(100) NOT NULL,
-  `score` int NOT NULL
+  `score` int NOT NULL,
+  KEY `fk_logininfo_id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 COMMIT;
 
