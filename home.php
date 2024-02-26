@@ -284,11 +284,11 @@
       </div>
       <div class="column">
         <h3>Exam Instructions</h3>
-        <button class="fa fa-eye icon"></button>
+        <button class="fa fa-eye icon" onclick="gotoPage('examinfo.php')"></button>
       </div>
       <div class="column">
         <h3>Exam Apply</h3>
-        <button class="fa fa-plus icon"></button>
+        <button class="fa fa-plus icon" onclick="gotoPage('examfill.php')"></button>
       </div>
 
     </div>
@@ -302,19 +302,21 @@
   </div>
   <script>
     function gotoPage(url) {
-      var queryString = window.location.search;
+      if (url !== "examinfo.php") {
+        var queryString = window.location.search;
 
-      var queryStringWithoutQuestionMark = queryString.slice(1);
-      var queryParams = {};
-      queryStringWithoutQuestionMark.split('&').forEach(function(param) {
-        var keyValue = param.split('=');
-        var key = decodeURIComponent(keyValue[0]);
-        var value = decodeURIComponent(keyValue[1] || '');
-        queryParams[key] = value;
-      });
-      let id = queryParams.id;
-      window.location.href = url + "?id=" + id;
-
+        var queryStringWithoutQuestionMark = queryString.slice(1);
+        var queryParams = {};
+        queryStringWithoutQuestionMark.split('&').forEach(function(param) {
+          var keyValue = param.split('=');
+          var key = decodeURIComponent(keyValue[0]);
+          var value = decodeURIComponent(keyValue[1] || '');
+          queryParams[key] = value;
+        });
+        let id = queryParams.id;
+        window.location.href = url + "?id=" + id;
+      } else
+        window.location.href = url
     }
   </script>
 
