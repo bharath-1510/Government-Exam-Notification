@@ -12,7 +12,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #7a7373;
             margin: 0;
             padding: 0;
             display: flex;
@@ -130,7 +130,7 @@ if (
             if (!$con) {
                 die("Connection failed!" . mysqli_connect_error());
             }
-            $sql = "INSERT INTO logininfo (name, email, createdAt,password) VALUES (?, ?, ?,?)";
+            $sql = "INSERT INTO login_info (name, email, createdAt,password) VALUES (?, ?, ?,?)";
             $stmt = $con->prepare($sql);
             $stmt->bind_param('ssss', $name, $email, $date, $userPassword);
             if ($stmt->execute()) {
@@ -161,7 +161,7 @@ if (
     if (!$con) {
         die("Connection failed!" . mysqli_connect_error());
     }
-    $sql = "SELECT id,email,password FROM logininfo";
+    $sql = "SELECT id,email,password FROM login_info";
     $result = $con->query($sql);
 
     if ($result->num_rows > 0) {
