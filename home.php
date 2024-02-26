@@ -114,6 +114,12 @@
       cursor: none;
     }
 
+    .not-done {
+      background-color: red;
+      color: white;
+      cursor: none;
+    }
+
     @media screen and (max-width: 600px) {
       .row {
         flex-direction: column;
@@ -145,6 +151,22 @@
       while ($row = $result->fetch_assoc()) {
         if ($id === $row["id"]) {
           $name = $row['name'];
+          $sql1
+            = "SELECT id FROM contact_info where id=" . $id;
+          $sql2
+            = "SELECT id FROM document_info where id=" . $id;
+          $sql3
+            = "SELECT id FROM education_info  where id=" . $id;
+          $sql4
+            = "SELECT id FROM personal_info where id=" . $id;
+          $result1 = $con->query($sql1);
+          $result2 = $con->query($sql2);
+          $result3 = $con->query($sql3);
+          $result4 = $con->query($sql4);
+          if ($result1->num_rows > 0 && $result2->num_rows > 0 && $result3->num_rows > 0 && $result4->num_rows > 0) {
+            $stmt = $con->prepare("UPDATE login_info SET status = 1 WHERE id = " . $id);
+            $stmt->execute();
+          }
           echo "
       <h2>Welcome $name,</h2>
           ";
@@ -288,14 +310,71 @@
       </div>
       <div class="column">
         <h3>Exam Apply</h3>
-        <button class="fa fa-plus icon" onclick="gotoPage('examfill.php')"></button>
+        <?php
+        $host = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "students4244";
+        $con = mysqli_connect($host, $username, $password, $dbname);
+        if (!$con) {
+          die("Connection failed!" . mysqli_connect_error());
+        }
+
+        $id = $_GET['id'];
+        $sql = "SELECT id FROM document_info";
+        $result = $con->query($sql);
+        $f = 0;
+        if ($result->num_rows > 0) {
+          while ($row = $result->fetch_assoc()) {
+            if ($id === $row["id"]) {
+              $f = 1;
+              break;
+            }
+          }
+        }
+        if ($f) {
+          echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('examfill.php')\"></button>";
+        } else
+
+          echo "<button type='button' class='fa fa-times icon not-done' disabled></button>";
+        ?>
+
       </div>
 
     </div>
+
     <div class="row">
       <div class="column">
         <h3>View All Information</h3>
-        <button class="fa fa-eye icon"></button>
+        <?php
+        $host = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "students4244";
+        $con = mysqli_connect($host, $username, $password, $dbname);
+        if (!$con) {
+          die("Connection failed!" . mysqli_connect_error());
+        }
+
+        $id = $_GET['id'];
+        $sql = "SELECT id FROM document_info";
+        $result = $con->query($sql);
+        $f = 0;
+        if ($result->num_rows > 0) {
+          while ($row = $result->fetch_assoc()) {
+            if ($id === $row["id"]) {
+              $f = 1;
+              break;
+            }
+          }
+        }
+        if ($f) {
+          echo "<button type='button' class='fa fa-eye icon' onclick=\"gotoPage('examfill.php')\"></button>";
+        } else
+
+          echo "<button type='button' class='fa fa-times icon not-done' disabled></button>";
+        ?>
+
       </div>
 
     </div>
