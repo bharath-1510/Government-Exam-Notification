@@ -219,7 +219,7 @@
                                 header("Location: index.php");
                         }
 
-                        ?>
+                        echo '
                     </table>
                 </div>
             </div>
@@ -231,8 +231,7 @@
                 <label>Exam name</label>
                 <div class="select-container">
                     <select name="id">
-                        <option value="">Select Option</option>
-                        <?php
+                        <option value="">Select Option</option>';
                         $eligible = array(
                             "SSLC" => array("SSLC"),
                             "HSC" => array("SSLC", "HSC"),
@@ -240,15 +239,6 @@
                             "Graduation" => array("SSLC", "HSC", "Graduation"),
                             "Post Graduation" => array("SSLC", "HSC", "Graduation", "Post Graduation"),
                         );
-                        $host = "localhost:3308";
-                        $username = "root";
-                        $password = "";
-                        $dbname = "students4244";
-                        $con = mysqli_connect($host, $username, $password, $dbname);
-                        if (!$con) {
-                            die("Connection failed!" . mysqli_connect_error());
-                        }
-                        $id = $_GET['id'];
                         $sql = "SELECT qualification FROM education_info where id =" . $id;
                         $result = $con->query($sql);
 
@@ -265,16 +255,14 @@
                             }
                         }
 
-                        ?>
-
-                    </select>
-                    <div class="select-arrow">&#9660;</div>
+                        echo '
+                        </select>
+                        <div class="select-arrow">&#9660;</div>
                 </div>
                 <label>Exam Date</label>
                 <div class="select-container">
                     <select name="date">
-                        <option value="">Select Date</option>
-                        <?php
+                        <option value="">Select Date</option>';
                         $currentDate = new DateTime();
                         $nextSaturday = clone $currentDate;
                         $nextSaturday->modify('next saturday');
@@ -287,15 +275,14 @@
                         echo "<option value=" . $nextSaturday->format('Y-m-d') . PHP_EOL . ">" . $nextSaturday->format('Y-m-d') . PHP_EOL . "</option>";
                         echo "<option value=" . $nextSunday->format('Y-m-d') . PHP_EOL . ">" . $nextSunday->format('Y-m-d') . PHP_EOL . "</option>";
 
-                        ?>
+                        echo '
                     </select>
                     <div class="select-arrow">&#9660;</div>
                 </div>
                 <label>Exam Time</label>
                 <div class="select-container">
                     <select name="time">
-                        <option value="">Select Time</option>
-                        <?php
+                        <option value="">Select Time</option>';
                         $startTime = new DateTime('10:00');
                         $endTime = new DateTime('18:00');
 
@@ -309,7 +296,7 @@
                             $currentTime->add(new DateInterval('PT3H'));
                             $currentTime->add(new DateInterval('PT30M'));
                         }
-                        ?>
+                        echo '
                     </select>
                     <div class="select-arrow">&#9660;</div>
                 </div>
@@ -331,116 +318,106 @@
                         <option value="villupuram">villupuram</option>
                     </select>
                     <div class="select-arrow">&#9660;</div>
-                </div>
-                <?php
-                $host = "localhost:3308";
-                $username = "root";
-                $password = "";
-                $dbname = "students4244";
-                $con = mysqli_connect($host, $username, $password, $dbname);
-                if (!$con) {
-                    die("Connection failed!" . mysqli_connect_error());
-                }
-                $id = $_GET['id'];
-                $sql1 = "SELECT * FROM exams where user_id=" . $id;
-                $result1 = $con->query($sql1);
-                $i = 0;
-                $j = 0;
-                if ($result1->num_rows > 0) {
-                    while ($row1 = $result1->fetch_assoc()) {
-                        if ($row1["status"] == 1) {
-                            $i++;
+                </div>';
+                        $sql1 = "SELECT * FROM exams where user_id=" . $id;
+                        $result1 = $con->query($sql1);
+                        $i = 0;
+                        $j = 0;
+                        if ($result1->num_rows > 0) {
+                            while ($row1 = $result1->fetch_assoc()) {
+                                if ($row1["status"] == 1) {
+                                    $i++;
+                                }
+                                $j++;
+                            }
                         }
-                        $j++;
-                    }
-                }
-                if ($i === $j)
-                    echo '<button type="submit">Save</button>';
-                ?>
+                        if ($i === $j)
+                            echo '<button type="submit">Save</button>';
 
-            </form>
-        </div>
+                        echo '
+                        </form>
+                </div>
 
-    </div>
-</body>
-<?php
+            </div>
+</body>';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php';
-$mail = new PHPMailer(true);
+                        use PHPMailer\PHPMailer\PHPMailer;
+                        use PHPMailer\PHPMailer\Exception;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                        require 'vendor/autoload.php';
+                        $mail = new PHPMailer(true);
 
-    $id = $_GET['id'];
-    $date = $_POST["date"];
-    $time = $_POST["time"];
-    $exam_id = $_POST["id"];
-    $centre = $_POST["centre"];
-    $host = "localhost:3308";
-    $username = "root";
-    $password = "";
-    $dbname = "students4244";
-    $con = mysqli_connect($host, $username, $password, $dbname);
-    if (!$con) {
-        die("Connection failed!" . mysqli_connect_error());
-    }
-    $datetime = $date . ' ' . $time;
-    $sql1 = "SELECT * FROM exam_info";
-    $result1 = $con->query($sql1);
-    while ($row = $result1->fetch_assoc()) {
-        $db_exam[$row["id"]] = $row["name"];
-    }
-    $sql = "INSERT INTO exams (user_id,exam_id, exam_datetime, 
+                        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+                            $id = $_GET['id'];
+                            $date = $_POST["date"];
+                            $time = $_POST["time"];
+                            $exam_id = $_POST["id"];
+                            $centre = $_POST["centre"];
+                            $host = "localhost:3308";
+                            $username = "root";
+                            $password = "";
+                            $dbname = "students4244";
+                            $con = mysqli_connect($host, $username, $password, $dbname);
+                            if (!$con) {
+                                die("Connection failed!" . mysqli_connect_error());
+                            }
+                            $datetime = $date . ' ' . $time;
+                            $sql1 = "SELECT * FROM exam_info";
+                            $result1 = $con->query($sql1);
+                            while ($row = $result1->fetch_assoc()) {
+                                $db_exam[$row["id"]] = $row["name"];
+                            }
+                            $sql = "INSERT INTO exams (user_id,exam_id, exam_datetime, 
         location) VALUES (?, ?, ?,?)";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param('iiss', $id, $exam_id, $datetime, $centre);
-    if ($stmt->execute()) {
-        try {
-            $id = $_GET['id'];
-            $sql = "SELECT name,email FROM login_info where id = " . $id;
-            $result = $con->query($sql);
-            $name = "";
-            $email = "";
+                            $stmt = $con->prepare($sql);
+                            $stmt->bind_param('iiss', $id, $exam_id, $datetime, $centre);
+                            if ($stmt->execute()) {
+                                try {
+                                    $id = $_GET['id'];
+                                    $sql = "SELECT name,email FROM login_info where id = " . $id;
+                                    $result = $con->query($sql);
+                                    $name = "";
+                                    $email = "";
 
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $email = $row["email"];
-                }
-            }
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'governmentapp168@gmail.com';
-            $mail->Password   = 'qivt ulit qbbw gfjo';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-            $mail->Port       = 465;
-
-
-            $mail->setFrom('governmentapp168@gmail.com', 'Government App');
-            $mail->addAddress($email, $name);
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            $email = $row["email"];
+                                        }
+                                    }
+                                    $mail->isSMTP();
+                                    $mail->Host       = 'smtp.gmail.com';
+                                    $mail->SMTPAuth   = true;
+                                    $mail->Username   = 'governmentapp168@gmail.com';
+                                    $mail->Password   = 'qivt ulit qbbw gfjo';
+                                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                                    $mail->Port       = 465;
 
 
-            $mail->isHTML(true);
-            $mail->Subject = 'Government Exam Notification';
-            $mail->Body    = '<br><br><br>You have Applied for ' . $db_exam[$exam_id] .
-                ' Exam.<br><br>Location : ' . $centre .
-                "<br>Time : " . $time .
-                "<br>Date : " . $date . "<br><br><br><h3>THANKYOU</h3>";
+                                    $mail->setFrom('governmentapp168@gmail.com', 'Government App');
+                                    $mail->addAddress($email, $name);
 
-            $mail->send();
-            echo "<script>alert('Exam Applied Succesfully and Invitation Sent')</script>";
-        } catch (Exception $e) {
-            echo "<script>alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}')</script>";
-        }
-        echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
-    } else {
-        echo "<script>alert('Error')</script>";
-    }
-    mysqli_close($con);
-}
-?>
+
+                                    $mail->isHTML(true);
+                                    $mail->Subject = 'Government Exam Notification';
+                                    $mail->Body    = '<br><br><br>You have Applied for ' . $db_exam[$exam_id] .
+                                        ' Exam.<br><br>Location : ' . $centre .
+                                        "<br>Time : " . $time .
+                                        "<br>Date : " . $date . "<br><br><br><h3>THANKYOU</h3>";
+
+                                    $mail->send();
+                                    echo "<script>alert('Exam Applied Succesfully and Invitation Sent')</script>";
+                                } catch (Exception $e) {
+                                    echo "<script>alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}')</script>";
+                                }
+                                echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
+                            } else {
+                                echo "<script>alert('Error')</script>";
+                            }
+                            mysqli_close($con);
+                        }
+                        ?>
 
 
 </html>

@@ -122,7 +122,7 @@
         if ($f)
             header("Location: index.php");
     }
-    ?>
+    echo '
     <form action="" method="post">
         <h2>Education Information</h2>
         <label>Qualification</label>
@@ -152,39 +152,31 @@
 
 
 
-</body>
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_GET['id'];
+</body>';
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $id = $_GET['id'];
 
-    $qualification = $_POST["qualification"];
-    $field = $_POST["field"];
-    $yop = $_POST["yop"];
-    $mark = $_POST["mark"];
-    $host = "localhost:3308";
-    $username = "root";
-    $password = "";
-    $dbname = "students4244";
-    $con = mysqli_connect($host, $username, $password, $dbname);
-    if (!$con) {
-        die("Connection failed!" . mysqli_connect_error());
-    }
+        $qualification = $_POST["qualification"];
+        $field = $_POST["field"];
+        $yop = $_POST["yop"];
+        $mark = $_POST["mark"];
 
 
 
-    $sql = "INSERT INTO education_info (id,qualification, field, 
+        $sql = "INSERT INTO education_info (id,qualification, field, 
         year_of_passing,mark) VALUES (?, ?, ?,?,?)";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param('issid', $id, $qualification, $field, $yop, $mark);
-    if ($stmt->execute()) {
-        echo "<script>alert('Education Information Saved')</script>";
-        echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
-    } else {
-        echo "<script>alert('Error')</script>";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param('issid', $id, $qualification, $field, $yop, $mark);
+        if ($stmt->execute()) {
+            echo "<script>alert('Education Information Saved')</script>";
+            echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
+        } else {
+            echo "<script>alert('Error')</script>";
+        }
+        mysqli_close($con);
     }
-    mysqli_close($con);
-}
-?>
+
+    ?>
 
 
 </html>

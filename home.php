@@ -240,14 +240,14 @@
         } else
           echo "<button type='button' class='fa fa-check icon done' disabled></button>";
         $url = 'examinfo.php';
-        echo '
+        echo "
       </div>
-      <div class="column">
+      <div class='column'>
         <h3>Exam Instructions</h3>
-        <button class="fa fa-eye icon" onclick="gotoPage(' . $url . ')"></button>
+        <button class='fa fa-eye icon' onclick=\"gotoPage('$url')\"></button>
       </div>
-      <div class="column">
-        <h3>Exam Apply</h3>';
+      <div class='column'>
+        <h3>Exam Apply</h3>";
 
         $id = $_GET['id'];
         $sql1

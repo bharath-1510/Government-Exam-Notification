@@ -129,7 +129,7 @@
         if ($f)
             header("Location: index.php");
     }
-    ?>
+    echo '
     <form action="" method="post">
         <h2>Contact Information</h2>
         <textarea name="address" id="address" cols="30" rows="5" placeholder="Address"></textarea>
@@ -143,39 +143,32 @@
 
 
 
-</body>
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_GET['id'];
+</body>';
 
-    $address = $_POST["address"];
-    $state = $_POST["state"];
-    $nationality = $_POST["nationality"];
-    $pincode = $_POST["pincode"];
-    $phonenumber = $_POST["phonenumber"];
-    $host = "localhost:3308";
-    $username = "root";
-    $password = "";
-    $dbname = "students4244";
-    $con = mysqli_connect($host, $username, $password, $dbname);
-    if (!$con) {
-        die("Connection failed!" . mysqli_connect_error());
-    }
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $id = $_GET['id'];
+
+        $address = $_POST["address"];
+        $state = $_POST["state"];
+        $nationality = $_POST["nationality"];
+        $pincode = $_POST["pincode"];
+        $phonenumber = $_POST["phonenumber"];
 
 
-    $sql = "INSERT INTO contact_info (id,address, state, 
+
+        $sql = "INSERT INTO contact_info (id,address, state, 
         nationality,pincode,phonenumber) VALUES (?, ?, ?,?,?,?)";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param('isssss', $id, $address, $state, $nationality, $pincode, $phonenumber);
-    if ($stmt->execute()) {
-        echo "<script>alert('Contact Information Saved')</script>";
-        echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
-    } else {
-        echo "<script>alert('Error')</script>";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param('isssss', $id, $address, $state, $nationality, $pincode, $phonenumber);
+        if ($stmt->execute()) {
+            echo "<script>alert('Contact Information Saved')</script>";
+            echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
+        } else {
+            echo "<script>alert('Error')</script>";
+        }
+        mysqli_close($con);
     }
-    mysqli_close($con);
-}
-?>
+    ?>
 
 
 </html>

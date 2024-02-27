@@ -139,7 +139,7 @@
         if ($f)
             header("Location: index.php");
     }
-    ?>
+    echo '
     <form action="" method="post" enctype="multipart/form-data">
         <div class="inline">
             <div class="col">
@@ -205,53 +205,52 @@
 
 
 
-</body>
-<?php
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $id = $_GET['id'];
-    $resume = file_get_contents($_FILES["resume"]["tmp_name"]);
+</body>';
 
-    $photoBlob = file_get_contents($_FILES['photo']['tmp_name']);
-    $signatureBlob = file_get_contents($_FILES['signature']['tmp_name']);
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $id = $_GET['id'];
+        $resume = file_get_contents($_FILES["resume"]["tmp_name"]);
 
-    $typistCert = $_POST["typistCert"] === "yes" ? 1 : 0;
-    $stenographerCert = $_POST["stenographerCert"] === "yes" ? 1 : 0;
-    $computerCourseCert = $_POST["computerCourseCert"] === "yes" ? 1 : 0;
+        $photoBlob = file_get_contents($_FILES['photo']['tmp_name']);
+        $signatureBlob = file_get_contents($_FILES['signature']['tmp_name']);
 
-    $dsn = 'mysql:host=localhost:3308;dbname=students4244';
-    $username = 'root';
-    $password = '';
+        $typistCert = $_POST["typistCert"] === "yes" ? 1 : 0;
+        $stenographerCert = $_POST["stenographerCert"] === "yes" ? 1 : 0;
+        $computerCourseCert = $_POST["computerCourseCert"] === "yes" ? 1 : 0;
 
-    try {
-        $pdo = new PDO($dsn, $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (PDOException $e) {
-        echo 'Connection failed: ' . $e->getMessage();
-    }
-    // Insert data into the database
-    $stmt = $pdo->prepare("INSERT INTO document_info (id,resume, photo, signature
+        $dsn = 'mysql:host=localhost:3308;dbname=students4244';
+        $username = 'root';
+        $password = '';
+
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo 'Connection failed: ' . $e->getMessage();
+        }
+        // Insert data into the database
+        $stmt = $pdo->prepare("INSERT INTO document_info (id,resume, photo, signature
      , typist_cert, stenography_cert, computer_course_cert
      ) VALUES ($id,:resume, :photo, :sign
      ,:typist, :steno, :cs
      )");
 
-    $stmt->bindParam(':resume', $resume, PDO::PARAM_LOB);
-    $stmt->bindParam(':photo', $photoBlob, PDO::PARAM_LOB);
-    $stmt->bindParam(':sign', $signatureBlob, PDO::PARAM_LOB);
+        $stmt->bindParam(':resume', $resume, PDO::PARAM_LOB);
+        $stmt->bindParam(':photo', $photoBlob, PDO::PARAM_LOB);
+        $stmt->bindParam(':sign', $signatureBlob, PDO::PARAM_LOB);
 
-    $stmt->bindParam(':typist', $typistCert, PDO::PARAM_BOOL);
-    $stmt->bindParam(':steno', $stenographerCert, PDO::PARAM_BOOL);
-    $stmt->bindParam(':cs', $computerCourseCert, PDO::PARAM_BOOL);
+        $stmt->bindParam(':typist', $typistCert, PDO::PARAM_BOOL);
+        $stmt->bindParam(':steno', $stenographerCert, PDO::PARAM_BOOL);
+        $stmt->bindParam(':cs', $computerCourseCert, PDO::PARAM_BOOL);
 
-    if ($stmt->execute()) {
-        echo "<script>alert('Details Uploaded Succesfully')</script>";
-        echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
-    } else {
-        echo "<script>alert('Error')</script>";
+        if ($stmt->execute()) {
+            echo "<script>alert('Details Uploaded Succesfully')</script>";
+            echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
+        } else {
+            echo "<script>alert('Error')</script>";
+        }
     }
-    mysqli_close($con);
-}
-?>
+    ?>
 
 
 </html>
