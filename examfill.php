@@ -168,6 +168,7 @@
                         $db_exam = array();
                         $sql1 = "SELECT * FROM exam_info";
                         $result1 = $con->query($sql1);
+                        $appliedExam =  array();
                         while ($row = $result1->fetch_assoc()) {
                             $db_exam[$row["id"]] = $row["name"];
                         }
@@ -202,6 +203,7 @@
 
                                         foreach ($id_key as $key) {
                                             echo "<td>" . $db_exam[$key] . "</td>";
+                                            array_push($appliedExam, $db_exam[$key]);
                                             foreach ($examinfo[$key] as $value) {
                                                 echo "<td>" . $value . "</td>";
                                             }
@@ -249,7 +251,8 @@
                                 $sql1 = "SELECT id,name,qualification FROM exam_info";
                                 $result1 = $con->query($sql1);
                                 while ($row1 = $result1->fetch_assoc()) {
-                                    if (in_array($row1["qualification"], $graduationArray))
+                                    if (in_array($row1["qualification"], $graduationArray) && !(in_array($row1["name"], $appliedExam)))
+
                                         echo "<option value=" . $row1["id"] . ">" . $row1["name"] . "</option>";
                                 }
                             }
@@ -319,20 +322,7 @@
                     </select>
                     <div class="select-arrow">&#9660;</div>
                 </div>';
-                        $sql1 = "SELECT * FROM exams where user_id=" . $id;
-                        $result1 = $con->query($sql1);
-                        $i = 0;
-                        $j = 0;
-                        if ($result1->num_rows > 0) {
-                            while ($row1 = $result1->fetch_assoc()) {
-                                if ($row1["status"] == 1) {
-                                    $i++;
-                                }
-                                $j++;
-                            }
-                        }
-                        if ($i === $j)
-                            echo '<button type="submit">Save</button>';
+                        echo '<button type="submit">Save</button>';
 
                         echo '
                         </form>
