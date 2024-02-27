@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Feb 26, 2024 at 04:39 PM
+-- Host: 127.0.0.1:3308
+-- Generation Time: Feb 27, 2024 at 06:57 AM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.13
 
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `education_info` (
   `id` int NOT NULL AUTO_INCREMENT,
   `field` varchar(255) DEFAULT NULL,
   `year_of_passing` int DEFAULT NULL,
-  `mark` float DEFAULT NULL,
+  `mark` decimal(5,2) DEFAULT NULL,
   `qualification` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -92,8 +92,8 @@ CREATE TABLE IF NOT EXISTS `education_info` (
 --
 
 INSERT INTO `education_info` (`id`, `field`, `year_of_passing`, `mark`, `qualification`) VALUES
-(4, 'Computer Science', 2023, 8, 'Graduation'),
-(5, 'Computer Science', 2023, 8, 'Graduation');
+(4, 'Computer Science', 2023, 8.00, 'Graduation'),
+(5, 'Computer Science', 2023, 8.05, 'Graduation');
 
 -- --------------------------------------------------------
 
@@ -103,13 +103,21 @@ INSERT INTO `education_info` (`id`, `field`, `year_of_passing`, `mark`, `qualifi
 
 DROP TABLE IF EXISTS `exams`;
 CREATE TABLE IF NOT EXISTS `exams` (
-  `id` int NOT NULL,
-  `exam_name` varchar(255) DEFAULT NULL,
-  `exam_time` varchar(255) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `exam_id` int DEFAULT NULL,
+  `exam_datetime` datetime DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
   `user_id` int DEFAULT NULL,
+  `status` bit(1) DEFAULT b'0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `exams`
+--
+
+INSERT INTO `exams` (`id`, `exam_id`, `exam_datetime`, `location`, `user_id`, `status`) VALUES
+(3, 18, '2024-03-03 13:30:00', 'Thanjavur', 5, b'0');
 
 -- --------------------------------------------------------
 
@@ -172,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `login_info` (
 
 INSERT INTO `login_info` (`name`, `email`, `password`, `id`, `createdAt`, `status`) VALUES
 ('Bharath', 'bharathmohan152@gmail.com', '121', 4, '2024-02-26 12:37:48', b'0'),
-('Deebiga', 'deebiga@gmail.com', '1234', 5, '2024-02-26 19:23:10', b'0');
+('Deebiga', 'deebiga@gmail.com', '1234', 5, '2024-02-26 19:23:10', b'1');
 
 -- --------------------------------------------------------
 
