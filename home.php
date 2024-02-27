@@ -135,7 +135,7 @@
   <!-- Add a navigation bar to help visitors navigating through your website -->
   <div class="exam-details">
     <?php
-    $host = "localhost:3308";
+    $host = "localhost";
     $username = "root";
     $password = "";
     $dbname = "students4244";
@@ -183,7 +183,7 @@
       <div class="column">
         <h3>Personal information</h3>
         <?php
-        $host = "localhost:3308";
+        $host = "localhost";
         $username = "root";
         $password = "";
         $dbname = "students4244";
@@ -212,7 +212,7 @@
       <div class="column">
         <h3>Contact information</h3>
         <?php
-        $host = "localhost:3308";
+        $host = "localhost";
         $username = "root";
         $password = "";
         $dbname = "students4244";
@@ -244,7 +244,7 @@
       <div class="column">
         <h3>Educational information</h3>
         <?php
-        $host = "localhost:3308";
+        $host = "localhost";
         $username = "root";
         $password = "";
         $dbname = "students4244";
@@ -277,7 +277,7 @@
       <div class="column">
         <h3>Documents</h3>
         <?php
-        $host = "localhost:3308";
+        $host = "localhost";
         $username = "root";
         $password = "";
         $dbname = "students4244";
@@ -311,7 +311,7 @@
       <div class="column">
         <h3>Exam Apply</h3>
         <?php
-        $host = "localhost:3308";
+        $host = "localhost";
         $username = "root";
         $password = "";
         $dbname = "students4244";
@@ -347,7 +347,7 @@
       <div class="column">
         <h3>View All Information</h3>
         <?php
-        $host = "localhost:3308";
+        $host = "localhost";
         $username = "root";
         $password = "";
         $dbname = "students4244";

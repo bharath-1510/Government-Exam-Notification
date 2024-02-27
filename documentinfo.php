@@ -117,7 +117,7 @@
 
 <body>
     <?php
-    $host = "localhost:3308";
+    $host = "localhost";
     $username = "root";
     $password = "";
     $dbname = "students4244";

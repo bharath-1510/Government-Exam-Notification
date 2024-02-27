@@ -151,7 +151,7 @@
                 <div class="table-container">
                     <table>
                         <?php
-                        $host = "localhost:3308";
+                        $host = "localhost";
                         $username = "root";
                         $password = "";
                         $dbname = "students4244";
@@ -240,7 +240,7 @@
                             "Graduation" => array("SSLC", "HSC", "Graduation"),
                             "Post Graduation" => array("SSLC", "HSC", "Graduation", "Post Graduation"),
                         );
-                        $host = "localhost:3308";
+                        $host = "localhost";
                         $username = "root";
                         $password = "";
                         $dbname = "students4244";
@@ -353,7 +353,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $time = $_POST["time"];
     $exam_id = $_POST["id"];
     $centre = $_POST["centre"];
-    $host = "localhost:3308";
+    $host = "localhost";
     $username = "root";
     $password = "";
     $dbname = "students4244";

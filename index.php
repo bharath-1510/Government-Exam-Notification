@@ -122,7 +122,7 @@ if (
         } else {
             date_default_timezone_set('Asia/Kolkata');
             $date = date('Y-m-d H:i:s');
-            $host = "localhost:3308";
+            $host = "localhost";
             $username = "root";
             $password = "";
             $dbname = "students4244";
@@ -153,7 +153,7 @@ if (
 ) {
     $email = $_POST["email"];
     $userPassword = $_POST["password"];
-    $host = "localhost:3308";
+    $host = "localhost";
     $username = "root";
     $password = "";
     $dbname = "students4244";

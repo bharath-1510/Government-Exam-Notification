@@ -94,7 +94,7 @@
         <div class="column">
             <div class="col-2">
                 <?php
-                $host = "localhost:3308";
+                $host = "localhost";
                 $username = "root";
                 $password = "";
                 $dbname = "students4244";

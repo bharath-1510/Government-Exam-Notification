@@ -100,7 +100,7 @@
 
 <body>
     <?php
-    $host = "localhost:3308";
+    $host = "localhost";
     $username = "root";
     $password = "";
     $dbname = "students4244";
@@ -202,7 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $disabled = $_POST["disabled"] === "yes" ? 1 : 0;
     $refugee = $_POST["refugee"] === "yes" ? 1 : 0;
     $dob = $_POST["dob"];
-    $host = "localhost:3308";
+    $host = "localhost";
     $username = "root";
     $password = "";
     $dbname = "students4244";

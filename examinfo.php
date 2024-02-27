@@ -201,7 +201,7 @@
                 <h3>Available Exams</h3>
                 <ul>
                     <?php
-                    $host = "localhost:3308";
+                    $host = "localhost";
                     $username = "root";
                     $password = "";
                     $dbname = "students4244";
