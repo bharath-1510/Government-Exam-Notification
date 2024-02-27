@@ -175,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO education_info (id,qualification, field, 
         year_of_passing,mark) VALUES (?, ?, ?,?,?)";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param('issii', $id, $qualification, $field, $yop, $mark);
+    $stmt->bind_param('issid', $id, $qualification, $field, $yop, $mark);
     if ($stmt->execute()) {
         echo "<script>alert('Education Information Saved')</script>";
         echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";

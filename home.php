@@ -334,12 +334,7 @@
         $result3 = $con->query($sql3);
         $result4 = $con->query($sql4);
         if ($result1->num_rows > 0 && $result2->num_rows > 0 && $result3->num_rows > 0 && $result4->num_rows > 0) {
-          $sql =  "SELECT id FROM exams where user_id=" . $id;
-          $result = $con->query($sql);
-          if ($result->num_rows > 0)
-            echo    "<button type='button' class='fa fa-check icon done'></button>";
-          else
-            echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('examfill.php')\"></button>";
+          echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('examfill.php')\"></button>";
         } else
           echo "<button type='button' class='fa fa-times icon not-done' disabled></button>";
         ?>
