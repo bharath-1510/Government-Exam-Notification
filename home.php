@@ -32,33 +32,7 @@
       padding: 20px;
     }
 
-    #startExamBtn,
-    #nextBtn {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
 
-    #uploadBtn {
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #fileInput {
-      display: none;
-    }
-
-    #fileInputLabel {
-      margin-top: 10px;
-      display: block;
-    }
 
     /* Use some color to spice up your page */
 
@@ -118,12 +92,6 @@
       background-color: red;
       color: white;
       cursor: none;
-    }
-
-    @media screen and (max-width: 600px) {
-      .row {
-        flex-direction: column;
-      }
     }
   </style>
 </head>
@@ -206,22 +174,12 @@
         }
         if ($f)
           echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('personalinfo.php')\"></button>";
-        ?>
-
+        echo "
       </div>
-      <div class="column">
+      <div class='column'>
         <h3>Contact information</h3>
-        <?php
-        $host = "localhost:3308";
-        $username = "root";
-        $password = "";
-        $dbname = "students4244";
-        $con = mysqli_connect($host, $username, $password, $dbname);
-        if (!$con) {
-          die("Connection failed!" . mysqli_connect_error());
-        }
+        ";
 
-        $id = $_GET['id'];
         $sql = "SELECT id FROM contact_info";
         $result = $con->query($sql);
         $f = 1;
@@ -237,23 +195,11 @@
           echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('contactinfo.php')\"></button>";
         } else
           echo "<button type='button' class='fa fa-check icon done' disabled></button>";
-        ?>
-
+        echo '
       </div>
 
       <div class="column">
-        <h3>Educational information</h3>
-        <?php
-        $host = "localhost:3308";
-        $username = "root";
-        $password = "";
-        $dbname = "students4244";
-        $con = mysqli_connect($host, $username, $password, $dbname);
-        if (!$con) {
-          die("Connection failed!" . mysqli_connect_error());
-        }
-
-        $id = $_GET['id'];
+        <h3>Educational information</h3>';
         $sql = "SELECT id FROM education_info";
         $result = $con->query($sql);
         $f = 1;
@@ -269,22 +215,13 @@
           echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('educationalinfo.php')\"></button>";
         } else
           echo "<button type='button' class='fa fa-check icon done' disabled></button>";
-        ?>
-      </div>
+        echo '
+          </div>
 
     </div>
     <div class="row">
       <div class="column">
-        <h3>Documents</h3>
-        <?php
-        $host = "localhost:3308";
-        $username = "root";
-        $password = "";
-        $dbname = "students4244";
-        $con = mysqli_connect($host, $username, $password, $dbname);
-        if (!$con) {
-          die("Connection failed!" . mysqli_connect_error());
-        }
+        <h3>Documents</h3>';
 
         $id = $_GET['id'];
         $sql = "SELECT id FROM document_info";
@@ -302,23 +239,15 @@
           echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('documentinfo.php')\"></button>";
         } else
           echo "<button type='button' class='fa fa-check icon done' disabled></button>";
-        ?>
+        $url = 'examinfo.php';
+        echo '
       </div>
       <div class="column">
         <h3>Exam Instructions</h3>
-        <button class="fa fa-eye icon" onclick="gotoPage('examinfo.php')"></button>
+        <button class="fa fa-eye icon" onclick="gotoPage(' . $url . ')"></button>
       </div>
       <div class="column">
-        <h3>Exam Apply</h3>
-        <?php
-        $host = "localhost:3308";
-        $username = "root";
-        $password = "";
-        $dbname = "students4244";
-        $con = mysqli_connect($host, $username, $password, $dbname);
-        if (!$con) {
-          die("Connection failed!" . mysqli_connect_error());
-        }
+        <h3>Exam Apply</h3>';
 
         $id = $_GET['id'];
         $sql1
@@ -337,38 +266,14 @@
           echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('examfill.php')\"></button>";
         } else
           echo "<button type='button' class='fa fa-times icon not-done' disabled></button>";
-        ?>
-
+        echo '
       </div>
 
     </div>
 
     <div class="row">
       <div class="column">
-        <h3>View All Information</h3>
-        <?php
-        $host = "localhost:3308";
-        $username = "root";
-        $password = "";
-        $dbname = "students4244";
-        $con = mysqli_connect($host, $username, $password, $dbname);
-        if (!$con) {
-          die("Connection failed!" . mysqli_connect_error());
-        }
-
-        $id = $_GET['id'];
-        $sql1
-          = "SELECT id FROM contact_info where id=" . $id;
-        $sql2
-          = "SELECT id FROM document_info where id=" . $id;
-        $sql3
-          = "SELECT id FROM education_info  where id=" . $id;
-        $sql4
-          = "SELECT id FROM personal_info where id=" . $id;
-        $result1 = $con->query($sql1);
-        $result2 = $con->query($sql2);
-        $result3 = $con->query($sql3);
-        $result4 = $con->query($sql4);
+        <h3>View All Information</h3>';
         if ($result1->num_rows > 0 && $result2->num_rows > 0 && $result3->num_rows > 0 && $result4->num_rows > 0) {
           echo "<button type='button' class='fa fa-eye icon' onclick=\"gotoPage('viewinfo.php')\"></button>";
         } else
