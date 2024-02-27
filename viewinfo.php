@@ -150,7 +150,7 @@
                                 $info["Refugee"] = $row1["refugee"] == 0 ? "No" : "Yes";
                                 $info["Religion"] = strtoupper($row1["religion"]);
                                 $info["Community"] = strtoupper($row1["community"]);
-                                $info["Gender"] = $row1["gender"];
+                                $info["Gender"] = ucfirst($row1["gender"]);
                                 $info["Full name"] = $row1["full_name"];
                             }
 
