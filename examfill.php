@@ -50,12 +50,45 @@
 
         }
 
-        form {
+        table {
+            width: 95%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            margin-top: 20px;
+
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        td {
+            width: 25%;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #b8b7b7;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        form,
+        .exam-section {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            min-height: 500px;
+            max-width: 525px;
             width: 100%;
         }
 
@@ -92,145 +125,218 @@
             justify-content: space-between;
         }
 
-        .col {
+        .col-2 {
             width: 49%;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            padding: 10px;
+            justify-content: space-between;
+        }
+
+        .table-container {
+            overflow: auto;
+            height: 430px;
         }
     </style>
 </head>
 
 <body>
-    <?php
-    $host = "localhost:3308";
-    $username = "root";
-    $password = "";
-    $dbname = "students4244";
-    $con = mysqli_connect($host, $username, $password, $dbname);
-    if (!$con) {
-        die("Connection failed!" . mysqli_connect_error());
-    }
-    $id = $_GET['id'];
-    $sql = "SELECT id FROM login_info";
-    $result = $con->query($sql);
-    $f = 1;
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            if ($id === $row["id"]) {
-                $f = 0;
-                break;
-            }
-        }
-        if ($f)
-            header("Location: index.php");
-    }
-    ?>
-    <form action="" method="post">
-        <h2>Exam Apply</h2>
-        <label>Exam name</label>
-        <div class="select-container">
-            <select name="id">
-                <option value="">Select Option</option>
-                <?php
-                $eligible = array(
-                    "SSLC" => array("SSLC"),
-                    "HSC" => array("SSLC", "HSC"),
-                    "Diploma" => array("SSLC", "Diploma"),
-                    "Graduation" => array("SSLC", "HSC", "Graduation"),
-                    "Post Graduation" => array("SSLC", "HSC", "Graduation", "Post Graduation"),
-                );
-                $host = "localhost:3308";
-                $username = "root";
-                $password = "";
-                $dbname = "students4244";
-                $con = mysqli_connect($host, $username, $password, $dbname);
-                if (!$con) {
-                    die("Connection failed!" . mysqli_connect_error());
-                }
-                $id = $_GET['id'];
-                $sql = "SELECT qualification FROM education_info where id =" . $id;
-                $result = $con->query($sql);
-
-
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $graduationArray = $eligible[$row["qualification"]];
-                        $sql1 = "SELECT id,name,qualification FROM exam_info";
-                        $result1 = $con->query($sql1);
-                        while ($row1 = $result1->fetch_assoc()) {
-                            if (in_array($row1["qualification"], $graduationArray))
-                                echo "<option value=" . $row1["id"] . ">" . $row1["name"] . "</option>";
+    <div class="container">
+        <div class="col-2">
+            <div class="exam-section">
+                <h3>Applied Exam</h3>
+                <div class="table-container">
+                    <table>
+                        <?php
+                        $host = "localhost:3308";
+                        $username = "root";
+                        $password = "";
+                        $dbname = "students4244";
+                        $con = mysqli_connect($host, $username, $password, $dbname);
+                        if (!$con) {
+                            die("Connection failed!" . mysqli_connect_error());
                         }
-                    }
-                }
+                        $id = $_GET['id'];
+                        $sql = "SELECT id FROM login_info";
+                        $result = $con->query($sql);
+                        $f = 1;
+                        $examinfo = array();
+                        $exam_keys = array();
+                        $db_exam = array();
+                        $sql1 = "SELECT * FROM exam_info";
+                        $result1 = $con->query($sql1);
+                        while ($row = $result1->fetch_assoc()) {
+                            $db_exam[$row["id"]] = $row["name"];
+                        }
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                if ($id === $row["id"]) {
+                                    $currentDate = new DateTime();
+                                    $sql1 = "SELECT * FROM exams where user_id=" . $id;
+                                    $result1 = $con->query($sql1);
+                                    if ($result1->num_rows > 0) {
+                                        while ($row1 = $result1->fetch_assoc()) {
 
-                ?>
+                                            if ($currentDate < $row1["exam_datetime"]) {
+                                                $stmt = $con->prepare("UPDATE exams SET status = 1 WHERE id = " . $row1["id"]);
+                                                $stmt->execute();
+                                            }
+                                            $exam_info = array();
+                                            $exam_info["Datetime"] = $row1["exam_datetime"];
+                                            $exam_info["Location"] = $row1["location"];
+                                            $exam_info["Completed"] = $row1["status"] == 0 ? "No" : "Yes";
+                                            $examinfo[$row1["exam_id"]] = $exam_info;
+                                            $exam_keys = array_keys($exam_info);
+                                        }
+                                        echo "<td>Exam Name</td>";
 
-            </select>
-            <div class="select-arrow">&#9660;</div>
+
+                                        foreach ($exam_keys as $key) {
+                                            echo "<td>" . $key . "</td>";
+                                        }
+                                        echo "<tr>";
+                                        $id_key = array_keys($examinfo);
+
+                                        foreach ($id_key as $key) {
+                                            echo "<td>" . $db_exam[$key] . "</td>";
+                                            foreach ($examinfo[$key] as $value) {
+                                                echo "<td>" . $value . "</td>";
+                                            }
+                                        }
+                                        echo "</tr>";
+                                    } else {
+                                        echo "<h4>No Exams Applied</h4>";
+                                    }
+                                    $f = 0;
+                                    break;
+                                }
+                            }
+
+                            if ($f)
+                                header("Location: index.php");
+                        }
+
+                        ?>
+                    </table>
+                </div>
+            </div>
         </div>
-        <label>Exam Date</label>
-        <div class="select-container">
-            <select name="date">
-                <option value="">Select Date</option>
-                <?php
-                $currentDate = new DateTime();
-                $nextSaturday = clone $currentDate;
-                $nextSaturday->modify('next saturday');
+        <div class="col-2">
 
-                // Calculate the next Sunday
-                $nextSunday = clone $nextSaturday;
-                $nextSunday->modify('next sunday');
+            <form action="" method="post">
 
-                // Format and display the results
-                echo "<option value=" . $nextSaturday->format('Y-m-d') . PHP_EOL . ">" . $nextSaturday->format('Y-m-d') . PHP_EOL . "</option>";
-                echo "<option value=" . $nextSunday->format('Y-m-d') . PHP_EOL . ">" . $nextSunday->format('Y-m-d') . PHP_EOL . "</option>";
+                <label>Exam name</label>
+                <div class="select-container">
+                    <select name="id">
+                        <option value="">Select Option</option>
+                        <?php
+                        $eligible = array(
+                            "SSLC" => array("SSLC"),
+                            "HSC" => array("SSLC", "HSC"),
+                            "Diploma" => array("SSLC", "Diploma"),
+                            "Graduation" => array("SSLC", "HSC", "Graduation"),
+                            "Post Graduation" => array("SSLC", "HSC", "Graduation", "Post Graduation"),
+                        );
+                        $host = "localhost:3308";
+                        $username = "root";
+                        $password = "";
+                        $dbname = "students4244";
+                        $con = mysqli_connect($host, $username, $password, $dbname);
+                        if (!$con) {
+                            die("Connection failed!" . mysqli_connect_error());
+                        }
+                        $id = $_GET['id'];
+                        $sql = "SELECT qualification FROM education_info where id =" . $id;
+                        $result = $con->query($sql);
 
-                ?>
-            </select>
-            <div class="select-arrow">&#9660;</div>
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $graduationArray = $eligible[$row["qualification"]];
+                                $sql1 = "SELECT id,name,qualification FROM exam_info";
+                                $result1 = $con->query($sql1);
+                                while ($row1 = $result1->fetch_assoc()) {
+                                    if (in_array($row1["qualification"], $graduationArray))
+                                        echo "<option value=" . $row1["id"] . ">" . $row1["name"] . "</option>";
+                                }
+                            }
+                        }
+
+                        ?>
+
+                    </select>
+                    <div class="select-arrow">&#9660;</div>
+                </div>
+                <label>Exam Date</label>
+                <div class="select-container">
+                    <select name="date">
+                        <option value="">Select Date</option>
+                        <?php
+                        $currentDate = new DateTime();
+                        $nextSaturday = clone $currentDate;
+                        $nextSaturday->modify('next saturday');
+
+                        // Calculate the next Sunday
+                        $nextSunday = clone $nextSaturday;
+                        $nextSunday->modify('next sunday');
+
+                        // Format and display the results
+                        echo "<option value=" . $nextSaturday->format('Y-m-d') . PHP_EOL . ">" . $nextSaturday->format('Y-m-d') . PHP_EOL . "</option>";
+                        echo "<option value=" . $nextSunday->format('Y-m-d') . PHP_EOL . ">" . $nextSunday->format('Y-m-d') . PHP_EOL . "</option>";
+
+                        ?>
+                    </select>
+                    <div class="select-arrow">&#9660;</div>
+                </div>
+                <label>Exam Time</label>
+                <div class="select-container">
+                    <select name="time">
+                        <option value="">Select Time</option>
+                        <?php
+                        $startTime = new DateTime('10:00');
+                        $endTime = new DateTime('18:00');
+
+
+                        $currentTime = clone $startTime;
+
+                        while ($currentTime <= $endTime) {
+                            echo
+                            "<option value=" . $currentTime->format('H:i') . PHP_EOL . ">" . $currentTime->format('H:i') . PHP_EOL . "</option>";
+
+                            $currentTime->add(new DateInterval('PT3H'));
+                            $currentTime->add(new DateInterval('PT30M'));
+                        }
+                        ?>
+                    </select>
+                    <div class="select-arrow">&#9660;</div>
+                </div>
+                <label>Exam Centre</label>
+
+                <div class="select-container">
+                    <select name="centre">
+                        <option value="Select Centre">Select Centre</option>
+                        <option value="Chennai">Chennai </option>
+                        <option value="Coimbatore">Coimbatore</option>
+                        <option value="Madurai">Madurai</option>
+                        <option value="Tiruchirappalli">Tiruchirappalli </option>
+                        <option value="Salem">Salem</option>
+                        <option value="Tirunelveli">Tirunelveli</option>
+                        <option value="Erode">Erode</option>
+                        <option value="Vellore">Vellore</option>
+                        <option value="Thanjavur">Thanjavur </option>
+                        <option value="cuddalore">Cuddalore</option>
+                        <option value="villupuram">villupuram</option>
+                    </select>
+                    <div class="select-arrow">&#9660;</div>
+                </div>
+                <button type="submit">Save</button>
+            </form>
         </div>
-        <label>Exam Time</label>
-        <div class="select-container">
-            <select name="time">
-                <option value="">Select Time</option>
-                <?php
-                $startTime = new DateTime('10:00');
-                $endTime = new DateTime('18:00');
 
-
-                $currentTime = clone $startTime;
-
-                while ($currentTime <= $endTime) {
-                    echo
-                    "<option value=" . $currentTime->format('H:i') . PHP_EOL . ">" . $currentTime->format('H:i') . PHP_EOL . "</option>";
-
-                    $currentTime->add(new DateInterval('PT3H'));
-                    $currentTime->add(new DateInterval('PT30M'));
-                }
-                ?>
-            </select>
-            <div class="select-arrow">&#9660;</div>
-        </div>
-        <label>Exam Centre</label>
-
-        <div class="select-container">
-            <select name="centre">
-                <option value="Select Centre">Select Centre</option>
-                <option value="Chennai">Chennai </option>
-                <option value="Coimbatore">Coimbatore</option>
-                <option value="Madurai">Madurai</option>
-                <option value="Tiruchirappalli">Tiruchirappalli </option>
-                <option value="Salem">Salem</option>
-                <option value="Tirunelveli">Tirunelveli</option>
-                <option value="Erode">Erode</option>
-                <option value="Vellore">Vellore</option>
-                <option value="Thanjavur">Thanjavur </option>
-                <option value="cuddalore">Cuddalore</option>
-                <option value="villupuram">villupuram</option>
-            </select>
-            <div class="select-arrow">&#9660;</div>
-        </div>
-        <button type="submit">Save</button>
-    </form>
+    </div>
 </body>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
