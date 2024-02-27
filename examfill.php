@@ -339,7 +339,15 @@
     </div>
 </body>
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
+$mail = new PHPMailer(true);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $id = $_GET['id'];
     $date = $_POST["date"];
     $time = $_POST["time"];
@@ -354,13 +362,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed!" . mysqli_connect_error());
     }
     $datetime = $date . ' ' . $time;
-
+    $sql1 = "SELECT * FROM exam_info";
+    $result1 = $con->query($sql1);
+    while ($row = $result1->fetch_assoc()) {
+        $db_exam[$row["id"]] = $row["name"];
+    }
     $sql = "INSERT INTO exams (user_id,exam_id, exam_datetime, 
         location) VALUES (?, ?, ?,?)";
     $stmt = $con->prepare($sql);
     $stmt->bind_param('iiss', $id, $exam_id, $datetime, $centre);
     if ($stmt->execute()) {
-        echo "<script>alert('Exam Applied Succesfully')</script>";
+        try {
+            $id = $_GET['id'];
+            $sql = "SELECT name,email FROM login_info where id = " . $id;
+            $result = $con->query($sql);
+            $name = "";
+            $email = "";
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $email = $row["email"];
+                }
+            }
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'governmentapp168@gmail.com';
+            $mail->Password   = 'qivt ulit qbbw gfjo';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port       = 465;
+
+
+            $mail->setFrom('governmentapp168@gmail.com', 'Government App');
+            $mail->addAddress($email, $name);
+
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Government Exam Notification';
+            $mail->Body    = '<br><br><br>You have Applied for ' . $db_exam[$exam_id] .
+                ' Exam.<br><br>Location : ' . $centre .
+                "<br>Time : " . $time .
+                "<br>Date : " . $date . "<br><br><br><h3>THANKYOU</h3>";
+
+            $mail->send();
+            echo "<script>alert('Exam Applied Succesfully and Invitation Sent')</script>";
+        } catch (Exception $e) {
+            echo "<script>alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}')</script>";
+        }
         echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
     } else {
         echo "<script>alert('Error')</script>";

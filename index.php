@@ -87,7 +87,7 @@
 
     <form id="signup-form" style="display: none;" action="" method="post">
         <h2>Sign Up</h2>
-        <input type="text" id="username" name="username" placeholder="Username" required>
+        <input type="text" id="username" name="username" placeholder="Enter Email's Username" required>
         <input type="email" id="email" name="email" placeholder="Email" required>
         <input type="password" id="password" name="password" placeholder="Password" required>
         <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
