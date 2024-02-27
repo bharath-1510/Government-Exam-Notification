@@ -122,7 +122,7 @@
         if ($f)
             header("Location: index.php");
     }
-    ?>
+    echo '
     <form action="" method="post">
         <h2>Personal Information</h2>
         <label>Full Name</label>
@@ -184,47 +184,31 @@
         </div>
         <label for="dob">Date of Birth</label><input type="date" id="dob" name="dob" required>
         <button type="submit">Save</button>
+    </form></body> ';
 
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $id = $_GET['id'];
 
-    </form>
-
-
-
-</body>
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_GET['id'];
-
-    $fullname = $_POST["fullname"];
-    $gender = $_POST["gender"];
-    $community = $_POST["community"];
-    $religion = $_POST["religion"];
-    $disabled = $_POST["disabled"] === "yes" ? 1 : 0;
-    $refugee = $_POST["refugee"] === "yes" ? 1 : 0;
-    $dob = $_POST["dob"];
-    $host = "localhost:3308";
-    $username = "root";
-    $password = "";
-    $dbname = "students4244";
-    $con = mysqli_connect($host, $username, $password, $dbname);
-    if (!$con) {
-        die("Connection failed!" . mysqli_connect_error());
-    }
-
-
-    $sql = "INSERT INTO personal_info (id,full_name, gender, 
+        $fullname = $_POST["fullname"];
+        $gender = $_POST["gender"];
+        $community = $_POST["community"];
+        $religion = $_POST["religion"];
+        $disabled = $_POST["disabled"] === "yes" ? 1 : 0;
+        $refugee = $_POST["refugee"] === "yes" ? 1 : 0;
+        $dob = $_POST["dob"];
+        $sql = "INSERT INTO personal_info (id,full_name, gender, 
         community,religion,refugee,differently_abled,dob) VALUES (?, ?, ?,?,?,?,?,?)";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param('issssiis', $id, $fullname, $gender, $community, $religion, $refugee, $disabled, $dob);
-    if ($stmt->execute()) {
-        echo "<script>alert('Personal Information Saved')</script>";
-        echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
-    } else {
-        echo "<script>alert('Error')</script>";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param('issssiis', $id, $fullname, $gender, $community, $religion, $refugee, $disabled, $dob);
+        if ($stmt->execute()) {
+            echo "<script>alert('Personal Information Saved')</script>";
+            echo "<script>window.location.href = 'home.php?id=" . $id . "';</script>";
+        } else {
+            echo "<script>alert('Error')</script>";
+        }
     }
     mysqli_close($con);
-}
-?>
+    ?>
 
 
 </html>

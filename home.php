@@ -278,6 +278,7 @@
           echo "<button type='button' class='fa fa-eye icon' onclick=\"gotoPage('viewinfo.php')\"></button>";
         } else
           echo "<button type='button' class='fa fa-times icon not-done' disabled></button>";
+        mysqli_close($con);
         ?>
 
       </div>
