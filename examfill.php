@@ -332,7 +332,32 @@
                     </select>
                     <div class="select-arrow">&#9660;</div>
                 </div>
-                <button type="submit">Save</button>
+                <?php
+                $host = "localhost:3308";
+                $username = "root";
+                $password = "";
+                $dbname = "students4244";
+                $con = mysqli_connect($host, $username, $password, $dbname);
+                if (!$con) {
+                    die("Connection failed!" . mysqli_connect_error());
+                }
+                $id = $_GET['id'];
+                $sql1 = "SELECT * FROM exams where user_id=" . $id;
+                $result1 = $con->query($sql1);
+                $i = 0;
+                $j = 0;
+                if ($result1->num_rows > 0) {
+                    while ($row1 = $result1->fetch_assoc()) {
+                        if ($row1["status"] == 1) {
+                            $i++;
+                        }
+                        $j++;
+                    }
+                }
+                if ($i === $j)
+                    echo '<button type="submit">Save</button>';
+                ?>
+
             </form>
         </div>
 

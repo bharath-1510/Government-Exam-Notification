@@ -218,7 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stenographerCert = $_POST["stenographerCert"] === "yes" ? 1 : 0;
     $computerCourseCert = $_POST["computerCourseCert"] === "yes" ? 1 : 0;
 
-    $dsn = 'mysql:host=localhost;dbname=students4244';
+    $dsn = 'mysql:host=localhost:3308;dbname=students4244';
     $username = 'root';
     $password = '';
 
