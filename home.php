@@ -321,21 +321,26 @@
         }
 
         $id = $_GET['id'];
-        $sql = "SELECT id FROM document_info";
-        $result = $con->query($sql);
-        $f = 0;
-        if ($result->num_rows > 0) {
-          while ($row = $result->fetch_assoc()) {
-            if ($id === $row["id"]) {
-              $f = 1;
-              break;
-            }
-          }
-        }
-        if ($f) {
-          echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('examfill.php')\"></button>";
+        $sql1
+          = "SELECT id FROM contact_info where id=" . $id;
+        $sql2
+          = "SELECT id FROM document_info where id=" . $id;
+        $sql3
+          = "SELECT id FROM education_info  where id=" . $id;
+        $sql4
+          = "SELECT id FROM personal_info where id=" . $id;
+        $result1 = $con->query($sql1);
+        $result2 = $con->query($sql2);
+        $result3 = $con->query($sql3);
+        $result4 = $con->query($sql4);
+        if ($result1->num_rows > 0 && $result2->num_rows > 0 && $result3->num_rows > 0 && $result4->num_rows > 0) {
+          $sql =  "SELECT id FROM exams where user_id=" . $id;
+          $result = $con->query($sql);
+          if ($result->num_rows > 0)
+            echo    "<button type='button' class='fa fa-check icon done'></button>";
+          else
+            echo "<button type='button' class='fa fa-plus icon' onclick=\"gotoPage('examfill.php')\"></button>";
         } else
-
           echo "<button type='button' class='fa fa-times icon not-done' disabled></button>";
         ?>
 
@@ -357,21 +362,21 @@
         }
 
         $id = $_GET['id'];
-        $sql = "SELECT id FROM document_info";
-        $result = $con->query($sql);
-        $f = 0;
-        if ($result->num_rows > 0) {
-          while ($row = $result->fetch_assoc()) {
-            if ($id === $row["id"]) {
-              $f = 1;
-              break;
-            }
-          }
-        }
-        if ($f) {
-          echo "<button type='button' class='fa fa-eye icon' onclick=\"gotoPage('examfill.php')\"></button>";
+        $sql1
+          = "SELECT id FROM contact_info where id=" . $id;
+        $sql2
+          = "SELECT id FROM document_info where id=" . $id;
+        $sql3
+          = "SELECT id FROM education_info  where id=" . $id;
+        $sql4
+          = "SELECT id FROM personal_info where id=" . $id;
+        $result1 = $con->query($sql1);
+        $result2 = $con->query($sql2);
+        $result3 = $con->query($sql3);
+        $result4 = $con->query($sql4);
+        if ($result1->num_rows > 0 && $result2->num_rows > 0 && $result3->num_rows > 0 && $result4->num_rows > 0) {
+          echo "<button type='button' class='fa fa-eye icon' onclick=\"gotoPage('viewinfo.php')\"></button>";
         } else
-
           echo "<button type='button' class='fa fa-times icon not-done' disabled></button>";
         ?>
 
