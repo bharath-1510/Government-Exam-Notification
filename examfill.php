@@ -198,17 +198,19 @@
                                         foreach ($exam_keys as $key) {
                                             echo "<td>" . $key . "</td>";
                                         }
-                                        echo "<tr>";
+                                        
                                         $id_key = array_keys($examinfo);
 
                                         foreach ($id_key as $key) {
+                                            echo "<tr>";
                                             echo "<td>" . $db_exam[$key] . "</td>";
                                             array_push($appliedExam, $db_exam[$key]);
                                             foreach ($examinfo[$key] as $value) {
                                                 echo "<td>" . $value . "</td>";
                                             }
+                                            echo "</tr>";
                                         }
-                                        echo "</tr>";
+                                        
                                     } else {
                                         echo "<h4>No Exams Applied</h4>";
                                     }
